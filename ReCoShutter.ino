@@ -32,7 +32,24 @@ uint8_t cp = 2;  // Cursor pointer
 */
 
 void setup() {
+  pinMode(PINB4, OUTPUT);
 
+  oled.init();
+  oled.clearDisplay();
+  oled.setCursorXY(0, 0);
+  oled.printString("wait please...");
+
+  mode = mainMenu;
+
+  for (int i = 0; i < 3; i++) {
+    EEPROM.get(0 + i * 10, set[i].range);
+    EEPROM.get(2 + i * 10, set[i].offset);
+    EEPROM.get(3 + i * 10, set[i].loop);
+    EEPROM.get(4 + i * 10, set[i].interval);
+  }
+  
+  delay(3000);
+  oled.clearDisplay();
 }
 
 void loop() {
