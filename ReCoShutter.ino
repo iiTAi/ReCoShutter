@@ -52,16 +52,24 @@ void beep() {
   digitalWrite(PINB4, LOW);
 }
 
+void release() {
+  digitalWrite(PINB1, HIGH);
+  delay(30);
+  digitalWrite(PINB1, LOW);
+}
+
 /*
 * PB2: SCL
 * PB0: SDA
 * PB3: ADC
 * PB4: Digital Out
+* PB5: Digital Out
 */
 
 /*---------- main ----------*/
 void setup() {
   pinMode(PINB4, OUTPUT);
+  pinMode(PINB1, OUTPUT);
 
   oled.init();
   oled.clearDisplay();
@@ -203,16 +211,20 @@ void loop() {
           }
           break;
         case 1:
-          if (!(start))
+          if (!(start)) {
             start = millis();
+            release();
+          }
           now = millis();
           if (start)
             timeOfRemain = (now - start) * 0.001;
           if (timeOfRemain == set[sp - 1].range) {
+            release();
             timerScene = (set[sp - 1].loop) ? 2 : 0;
             timeOfRemain = 0;
             start = 0;
             beep();
+            delay(30);
             beep();
           }
           break;
