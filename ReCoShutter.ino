@@ -26,6 +26,9 @@ uint8_t setFlag = 0;
 uint8_t cp = 2;  // Cursor pointer
 uint8_t sw;  // switch
 uint16_t buf;  // Use to edit settings
+uint8_t timerScene = 0;
+uint32_t start = 0, now = 0;
+uint16_t timeOfOset, timeOfRemain, timeOfTimint;
 
 /*--- function ---*/
 uint8_t readSwitch() {
@@ -166,6 +169,80 @@ void loop() {
       }
       break;
     case timer:
+      oled.setCursorXY(0, 0);
+      oled.printString("TIMER");
+      oled.setCursorXY(0, 1);
+      oled.printString("----------------");
+
+      oled.setCursorXY(0, 2);
+      oled.printString("REMAIN:");
+      oled.printNumber((long)(set[sp - 1].range - timeOfRemain));
+      oled.setCursorXY(0, 4);
+      oled.printString("OFFSET:");
+      oled.printNumber((long)(set[sp - 1].offset - timeOfOset));
+      if (set[sp - 1].loop) {
+        oled.setCursorXY(0, 5);
+        oled.printString("TIMINT:");
+        oled.printNumber((long)(set[sp - 1].interval - timeOfTimint));
+      }
+
+      switch (timerScene) {
+        case 0:
+          if (sw == 4) {
+            start = millis();
+            beep();
+          }
+          now = millis();
+          if (start)
+            timeOfOset = (now - start) * 0.001;
+          if (timeOfOset == set[sp - 1].offset && start) {
+            timerScene = 1;
+            timeOfOset = 0;
+            start = 0;
+            beep();
+          }
+          break;
+        case 1:
+          if (!(start))
+            start = millis();
+          now = millis();
+          if (start)
+            timeOfRemain = (now - start) * 0.001;
+          if (timeOfRemain == set[sp - 1].range) {
+            timerScene = (set[sp - 1].loop) ? 2 : 0;
+            timeOfRemain = 0;
+            start = 0;
+            beep();
+            beep();
+          }
+          break;
+        case 2:
+          if (!(start))
+            start = millis();
+          now = millis();
+          if (start)
+            timeOfTimint = (now - start) * 0.001;
+          if (timeOfTimint == set[sp - 1].interval) {
+            timerScene = 1;
+            timeOfTimint = 0;
+            start = 0;
+            beep();
+          }
+          break;
+      }
+
+      if (sw == 1) {
+        mode = setSelect;
+        start = 0;
+        now = 0;
+        timerScene = 0;
+        timeOfOset = 0;
+        timeOfRemain = 0;
+        timeOfTimint = 0;
+        oled.clearDisplay();
+        beep();
+      }
+
       break;
     case edit:
       oled.setCursorXY(0, 0);
@@ -261,7 +338,7 @@ void loop() {
               set[sp - 1].range += (set[sp - 1].range != 3600) ? 10 : 0;
               break;
             case 4: 
-              set[sp - 1].offset += (set[sp - 1].offset) ? 60 : 0;
+              set[sp - 1].offset += (set[sp - 1].offset != 60) ? 1 : 0;
               break;
             case 5: 
               set[sp - 1].loop = 1;
