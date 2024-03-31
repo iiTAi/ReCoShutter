@@ -201,8 +201,11 @@ void loop() {
             beep();
           }
           now = millis();
-          if (start)
+          if (start) {
             timeOfOset = (now - start) * 0.001;
+            oled.setCursorXY(7, 4);
+            oled.printString("     ");
+          }
           if (timeOfOset == set[sp - 1].offset && start) {
             timerScene = 1;
             timeOfOset = 0;
@@ -216,8 +219,11 @@ void loop() {
             release();
           }
           now = millis();
-          if (start)
+          if (start) {
             timeOfRemain = (now - start) * 0.001;
+            oled.setCursorXY(7, 2);
+            oled.printString("     ");
+          }
           if (timeOfRemain == set[sp - 1].range) {
             release();
             timerScene = (set[sp - 1].loop) ? 2 : 0;
@@ -232,8 +238,12 @@ void loop() {
           if (!(start))
             start = millis();
           now = millis();
-          if (start)
+          if (start) {
             timeOfTimint = (now - start) * 0.001;
+            delay(30);
+            oled.setCursorXY(7, 5);
+            oled.printString("     ");
+          }
           if (timeOfTimint == set[sp - 1].interval) {
             timerScene = 1;
             timeOfTimint = 0;
@@ -333,6 +343,8 @@ void loop() {
               set[sp - 1].interval -= (set[sp - 1].interval != 5) ? 5 : 0;
               break;
           }
+          oled.setCursorXY(9, cp);
+          oled.printString("     ");
         }
         beep();
       } else if (sw == 3) {
