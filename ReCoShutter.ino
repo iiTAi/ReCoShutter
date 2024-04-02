@@ -63,7 +63,7 @@ void release() {
 * PB0: SDA
 * PB3: ADC
 * PB4: Digital Out
-* PB5: Digital Out
+* PB1: Digital Out
 */
 
 /*---------- main ----------*/
