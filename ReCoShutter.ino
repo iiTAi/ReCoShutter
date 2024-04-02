@@ -133,8 +133,8 @@ void loop() {
           case 3: mode = edit; break;
         }
         cp = 2;
-        oled.clearDisplay();
         beep();
+        oled.clearDisplay();
       }
       break;
     case setSelect:
@@ -162,8 +162,8 @@ void loop() {
       if (sw == 1) {
         mode = mainMenu;
         sp = 1;
-        oled.clearDisplay();
         beep();
+        oled.clearDisplay();
       } else if (sw == 2 && sp != 1) {
         sp--;
         beep();
@@ -172,8 +172,8 @@ void loop() {
         beep();
       } else if (sw == 4) {
         mode = timer;
-        oled.clearDisplay();
         beep();
+        oled.clearDisplay();
       }
       break;
     case timer:
@@ -261,8 +261,8 @@ void loop() {
         timeOfOset = 0;
         timeOfRemain = 0;
         timeOfTimint = 0;
-        oled.clearDisplay();
         beep();
+        oled.clearDisplay();
       }
 
       break;
@@ -291,6 +291,7 @@ void loop() {
       oled.printString("-");
 
       if (sw == 1) {
+        beep();
         if (cp == 2) {
           mode = mainMenu;
           sp = 1;
@@ -318,7 +319,6 @@ void loop() {
           oled.setCursorXY(8, cp);
           oled.printChar(' ');
         }
-        beep();
       } else if (sw == 2) {
         if (cp == 2) {
           sp -= (sp != 1) ? 1 : 0;
