@@ -54,7 +54,7 @@ void beep() {
 
 void release() {
   digitalWrite(PINB1, HIGH);
-  delay(30);
+  delay(200);
   digitalWrite(PINB1, LOW);
 }
 
@@ -96,8 +96,9 @@ void setup() {
 
     }
   }
-
+  digitalWrite(PINB1, HIGH);
   delay(3000);
+  digitalWrite(PINB1, LOW);
   oled.clearDisplay();
 }
 
